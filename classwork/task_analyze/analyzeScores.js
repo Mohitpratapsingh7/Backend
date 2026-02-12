@@ -21,7 +21,7 @@ function analyzeScores(scoresArray) {
       failCount++;
     }
 
-    let status = num >= 60 ? "Passed" : "Failed"; // ternary use
+    let status = num >= 60 ? "Passed" : "Failed"; 
   }
 
   let averageScore =
