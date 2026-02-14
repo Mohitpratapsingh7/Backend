@@ -1,20 +1,33 @@
-const http=require("http");
-const user ={
-    name : "Mohit pratap singh",
-    age : 19
+const user={
+    name: "Mohit Pratap Singh",
+    age: "19"
 }
-const server=http.createServer((req,res)=>{
-    let method=req.method;
-    let url=req.url;
-    console.log(method,url);
 
-    if (method == "GET" && url == "/user") {
-    const users = user;
-    res.writeHead(200, { "Content-Type": "application/json" });
-    res.end(JSON.stringify(users));
-  }
-    
+
+const http = require("http");
+const fs = require("fs");
+const server = http.createServer((req,res) => {
+    const method = req.method;
+    const url = new URL(req.url,`http://${req.headers.host}`)
+    console.log(method,url);
+    if(method =="GET" && url.pathname =="/user" ){
+        res.writeHead(200, {"content-type":"application/json"})
+        res.end(JSON.stringify(user));
+    }
+    if(method == "POST" && url.pathname =="/user") {
+        let body = "";
+        req.on("data", (chunk) => {
+            body += chunk;
+        })
+
+        req.on("end", ()=> {
+            fs.appendFile("./file.txt", body , () => {
+               res.writeHead(201, "data written") 
+               res.end();
+            })
+        })
+    }
 });
-server.listen(3000,()=>{
-    console.log("Server listening ");
-});
+server.listen(4000, () =>{
+    console.log("server listening");
+})
